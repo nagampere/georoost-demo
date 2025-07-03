@@ -3,7 +3,7 @@ import yaml
 
 st.set_page_config(page_title="Home", layout="wide", initial_sidebar_state="collapsed")
 
-st.title("🕊️GeoRoost Dashboard🕊️")
+st.title("🕊️GeoRoost Dashboard Demo🕊️")
 
 # YAMLファイルを読み込む関数
 def load_chart_list():
