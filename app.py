@@ -7,7 +7,7 @@ st.title("🕊️GeoRoost Dashboard🕊️")
 
 # YAMLファイルを読み込む関数
 def load_chart_list():
-    with open("services/streamlit_demo/pages/page_list.yaml", "r", encoding="utf-8") as file:
+    with open("pages/page_list.yaml", "r", encoding="utf-8") as file:
         return yaml.safe_load(file)["charts"]
 
 # YAMLからチャートリストを取得
