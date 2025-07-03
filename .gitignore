@@ -1,0 +1,9 @@
+.env
+.venv
+.DS_Store
+.streamlit
+poetry.lock
+/logs
+
+pages/__pycache__/
+components/__pycache__/
