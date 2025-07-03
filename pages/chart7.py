@@ -19,7 +19,7 @@ con.sql('LOAD spatial;')
 st.title("シェアサイクルポートの可視化")
 
 
-area_df = con.sql("SELECT *, st_astext(geom) as geometry FROM  main_intermediate.int_sharecycle__station").df()
+area_df = con.sql("SELECT *, st_astext(geom) as geometry FROM  main_marts.mrt_sharecycle__station").df()
 pref_list = area_df['pref_name'].drop_duplicates().to_list()
 
 
