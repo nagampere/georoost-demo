@@ -8,6 +8,13 @@ from components.table_loader import get_tables
 from components.schema_selector import select_schema
 import geopandas as gpd
 
+# キャッシュのリセット
+if st.session_state.get("current_page") != "chart7":
+    # 他のページから来た場合、キャッシュをクリア
+    st.cache_data.clear()
+    st.session_state.clear()
+    st.session_state["current_page"] = "chart7"
+
 # データベースのパス
 MOTHERDUCK_TOKEN = st.secrets["MOTHERDUCK_TOKEN"]
 DUCKDB_PATH = f"md:georoost-demo?motherduck_token={MOTHERDUCK_TOKEN}"
@@ -26,7 +33,7 @@ pref_list = area_df['pref_name'].drop_duplicates().to_list()
 # 都道府県の選択
 pref_levels = st.multiselect(
     "都道府県名を選択してください", 
-    ['滋賀県', '京都府', '大阪府', '兵庫県', '奈良県']
+    pref_list
 )
 
 if st.button("市区町村・小地域のデータを取得"):
@@ -35,7 +42,7 @@ if st.button("市区町村・小地域のデータを取得"):
         name = ",".join(pref_levels)
         filtered_df = area_df[area_df['pref_name'].isin(pref_levels)]
     else:
-        name = "関西全域"
+        name = "全国"
         filtered_df = area_df
     
     filtered_gdf = gpd.GeoDataFrame(
@@ -102,4 +109,5 @@ if st.button("市区町村・小地域のデータを取得"):
 con.close()
 
 # ホームに戻るボタン
-if st.button("⬅ Back to Home"): st.switch_page("app.py")
+st.markdown("---")  # 区切り線
+if st.button("⬅ Back to Home"): st.switch_page("pages/home.py")
