@@ -25,6 +25,7 @@ con.sql('INSTALL spatial;')
 con.sql('LOAD spatial;')
 
 st.title("円内の人口抽出")
+st.text("処理に時間がかかる場合があります。")
 
 # ユーザー入力（緯度・経度・半径）
 col1, col2, col3 = st.columns(3)
