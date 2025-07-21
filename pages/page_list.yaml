@@ -1,30 +1,43 @@
-charts:
-  - title: README
-    description: GeoRoost Dashboardの使い方
-    page: pages/document1.py
-  
+Home:
+  - title: ホーム
+    description: ホーム画面
+    page: pages/home.py
+    icon: ":material/home:"
+
+Database:
   - title: テーブルビュワー
     description: duckdbに保存されたテーブルを表示する
     page: pages/chart1.py
+    icon: ":material/search:"
+    image: images/chart1_demo.png
 
   - title: テーブルエクスポート
     description: duckdbに保存されたテーブルをエクスポートする
     page: pages/chart2.py
+    icon: ":material/download:"
+    image: images/chart2_demo.png
 
+Analysis:
   - title: 円内の人口抽出
     description: 任意の地点と半径から、人口統計データを抽出して集計する
     page: pages/chart3.py
+    icon: 
+    image: images/chart3_demo.png
 
   - title: 市区町村・小地域の人口抽出
     description: 任意の市区町村・小地域から、人口統計データを抽出して集計する
     page: pages/chart5.py
-  
+    icon: 
+    image: images/chart5_demo.png
+
   - title: シェアサイクルポートの可視化
     description: GBFSのstation_information.jsonを用いてシェアサイクルポートを可視化する
     page: pages/chart7.py
-  
+    icon: 
+    image: images/chart7_demo.png
+
   - title: 測地系の変換
     description: CSVファイルをアップロードして、緯度経度の測地系を変換する(度分秒表記を含む)
     page: pages/chart8.py
-
-
+    icon: 
+    image: images/chart8_demo.png

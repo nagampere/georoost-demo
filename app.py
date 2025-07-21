@@ -1,28 +1,56 @@
 import streamlit as st
+from PIL import Image
 import yaml
 
-st.set_page_config(page_title="Home", layout="wide", initial_sidebar_state="collapsed")
+# Streamlitのページ設定
+im = Image.open("images/GeoRoost_favicon.ico")
+st.set_page_config(
+    page_title="GeoRoost", 
+    page_icon=im,
+    layout="wide", 
+    initial_sidebar_state="expanded"
+)
 
-st.title("🕊️GeoRoost Dashboard Demo🕊️")
+# ロゴの設定
+st.logo(
+    "images/GeoRoost_Sidebar.png", 
+    size="large",
+    icon_image="images/GeoRoost_favicon.ico"
+)
+
+
+
+# サイドバーに権利表記を追加し、リンクを設定
+
+st.sidebar.markdown(
+    """
+    <div style="text-align: center; font-size: 12px; color: gray;">
+        © 2025 <a href= "https://amane.ltd/" >株式会社AMANE</a>. All rights reserved.
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
+
 
 # YAMLファイルを読み込む関数
-def load_chart_list():
-    with open("pages/page_list.yaml", "r", encoding="utf-8") as file:
-        return yaml.safe_load(file)["charts"]
+def load_yaml(file_path) -> dict:
+    with open(file_path, "r", encoding="utf-8") as file:
+        return yaml.safe_load(file)
 
 # YAMLからチャートリストを取得
-chart_list = load_chart_list()
+dict_section = load_yaml("pages/page_list.yaml")
 
-# 縦並びでリスト表示
-for chart in chart_list:
-    col1, col2 = st.columns([3, 1])  # 左3:右1の比率で分割
-    
-    with col1:
-        st.markdown(f"#### {chart['title']}")
-        st.markdown(chart["description"])
-    
-    with col2:
-        if st.button(f"Go to 「{chart['title']}」", key=chart["page"], use_container_width=True):
-            st.switch_page(chart["page"])
+# ページリストを作成
+list_section = {}
 
-    st.markdown("---")  # 区切り線
+for section, list_chart in dict_section.items():
+    list_section[section] = []
+
+    for chart in list_chart:
+        # チャートのページ名を取得
+        page = st.Page(chart["page"], title=chart["title"], icon=chart["icon"])
+        list_section[section].append(page)
+
+pg = st.navigation(list_section)
+pg.run()
+
