@@ -24,7 +24,7 @@ col1, col2, col3 = st.columns([1, 3, 1])
 col2.image(    
     "images/GeoRoost_Long.png", 
     use_container_width=True,
-    caption="【社内用】地理情報を活用したデータ分析プラットフォーム"
+    caption="【デモ版】地理情報を活用したデータ分析プラットフォーム"
 )
 
 # st.markdown(load_markdown('README.md'), unsafe_allow_html=True)
