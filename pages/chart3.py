@@ -10,6 +10,13 @@ from components.population_pyramid import create_population_pyramid
 from components.population_aggregator import population_aggregate
 from components.circle_loader import download_circle
 
+# キャッシュのリセット
+if st.session_state.get("current_page") != "chart3":
+    # 他のページから来た場合、キャッシュをクリア
+    st.cache_data.clear()
+    st.session_state.clear()
+    st.session_state["current_page"] = "chart3"
+
 # DuckDB データベースのパス
 MOTHERDUCK_TOKEN = st.secrets["MOTHERDUCK_TOKEN"]
 DUCKDB_PATH = f"md:georoost-demo?motherduck_token={MOTHERDUCK_TOKEN}"
@@ -22,11 +29,11 @@ st.title("円内の人口抽出")
 # ユーザー入力（緯度・経度・半径）
 col1, col2, col3 = st.columns(3)
 with col1:
-    center_lat = st.number_input("中心の緯度 (latitude)", format="%.14f", value=34.6697458177466)
+    center_lat = st.number_input("中心の緯度 (latitude)", format="%.14f", value=35.71012978788501)
 with col2:
-    center_lon = st.number_input("中心の経度 (longitude)", format="%.14f", value=135.47444677140385)
+    center_lon = st.number_input("中心の経度 (longitude)", format="%.14f", value=139.81077085640902)
 with col3:
-    radius_m = st.number_input("半径 (m)", min_value=10, value=500)
+    radius_m = st.number_input("半径 (m)", min_value=10, max_value=10000, value=500)
 
 # 円内のデータを取得
 @st.cache_data
@@ -171,6 +178,20 @@ def get_data_within_circle(center_lat, center_lon, radius_m):
 if st.button("円内のデータを取得"):
     filtered_df = get_data_within_circle(center_lat, center_lon, radius_m)
     filtered_df = filtered_df.query("HCODE == 8101") # HCODEが町丁・字等(8101)のものを抽出
+    
+    # セッションステートに保存
+    st.session_state["filtered_df"] = filtered_df
+    st.session_state["center_lat"] = center_lat
+    st.session_state["center_lon"] = center_lon
+    st.session_state["radius_m"] = radius_m
+
+# セッションステートからデータを取得
+if "filtered_df" in st.session_state:
+    filtered_df = st.session_state["filtered_df"]
+    center_lat = st.session_state["center_lat"]
+    center_lon = st.session_state["center_lon"]
+    radius_m = st.session_state["radius_m"]
+    
     st.write(f"**円内のデータ ({len(filtered_df)} 件)**")
     st.dataframe(filtered_df.drop(columns='geometry'))
 
@@ -191,47 +212,55 @@ if st.button("円内のデータを取得"):
     st.write("### 人口ピラミッド")
     create_population_pyramid(agg_df)
     
-
     # 可視化（Pydeck）
     st.write("### マップ表示")
-    radius_scale = 10 * (radius_m / 500) # radius_mに応じて点のサイズを変更
-    zoom_scale = 14 - (radius_m / 2500) # radius_mに応じてズームレベルを変更
+    radius_scale = 10 * (radius_m / 500)
+    zoom_scale = 14 - (radius_m / 2500)
+    
     # Pydeckレイヤーの作成
     layer1 = pdk.Layer(
         "ScatterplotLayer",
         data=pd.DataFrame(data={"S_NAME":[f"中心座標\n({center_lon},\n{center_lat})"], "coordinates": [[center_lon, center_lat]]}),
         get_position="coordinates",
-        get_color=[0, 0, 255, 140],  # 青色
+        get_color=[0, 0, 255, 140],
         pickable=True,
         radius_scale=radius_scale,
     )
 
-    # Pydeckレイヤーの作成
     layer2 = pdk.Layer(
         "GeoJsonLayer",
         filtered_df[["S_NAME", "geometry"]],
-        get_fill_color=[255, 0, 0, 140],  # 赤色
+        get_fill_color=[255, 0, 0, 140],
         pickable=True,
         auto_highlight=True,
     )
 
-    # Pydeckのマップの作成
     deck = pdk.Deck(
         layers=[layer2, layer1],
         initial_view_state=pdk.ViewState(latitude=center_lat, longitude=center_lon, zoom=zoom_scale, pitch=0),
         tooltip={"text": "{S_NAME}"},
-        map_style='mapbox://styles/mapbox/light-v10'  # ベースマップを白に変更
+        map_style='mapbox://styles/mapbox/light-v10'
     )
 
-    # Streamlitアプリの描画
     st.pydeck_chart(deck)
 
-    # 円形領域の可視化
+    # 円形領域のダウンロード
     st.write("### 円形領域のダウンロード")
-    download_circle(center_lat, center_lon, radius_m)
+    
+    # GeoJSONデータを生成
+    geojson_data = filtered_df.to_json()
+    
+    # ダウンロードボタン
+    st.download_button(
+        label="円形領域をGeoJSONでダウンロード",
+        data=geojson_data,
+        file_name=f"circle_data_{radius_m}m.geojson",
+        mime="application/geo+json"
+    )
 
 # 接続を閉じる
 con.close()
 
 # ホームに戻るボタン
-if st.button("⬅ Back to Home"): st.switch_page("app.py")
+st.markdown("---")  # 区切り線
+if st.button("⬅ Back to Home"): st.switch_page("pages/home.py")
