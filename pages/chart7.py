@@ -108,6 +108,10 @@ if st.button("市区町村・小地域のデータを取得"):
 # 接続を閉じる
 con.close()
 
+# 出典情報
+references = "【出典】株式会社ドコモ・バイクシェア / 公共交通オープンデータ協議会「ドコモ・バイクシェア バイクシェア関連情報」,</br> OpenStreet株式会社 / 公共交通オープンデータ協議会「OpenStreet（ハローサイクリング） バイクシェア関連情報」"
+st.markdown(f"<div style='text-align: right; color: #666; font-size: 0.8em;'>{references}</div>", unsafe_allow_html=True)
+
 # ホームに戻るボタン
 st.markdown("---")  # 区切り線
 if st.button("⬅ Back to Home"): st.switch_page("pages/home.py")

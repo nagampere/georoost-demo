@@ -262,6 +262,9 @@ if "filtered_df" in st.session_state:
 # 接続を閉じる
 con.close()
 
+# 出典情報
+st.markdown("<div style='text-align: right; color: #666; font-size: 0.8em;'>【出典】総務省「国勢調査（2020年）」</div>", unsafe_allow_html=True)
+
 # ホームに戻るボタン
 st.markdown("---")  # 区切り線
 if st.button("⬅ Back to Home"): st.switch_page("pages/home.py")
