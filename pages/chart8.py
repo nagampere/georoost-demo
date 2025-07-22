@@ -220,7 +220,7 @@ layer = pdk.Layer(
 deck = pdk.Deck(
     layers=[layer],
     initial_view_state=pdk.ViewState(latitude=center_lat, longitude=center_lon, zoom=12, pitch=0),
-    map_style='mapbox://styles/mapbox/light-v10'  # ベースマップを白に変更
+    map_style='road'  # ベースマップを白に変更
 )
 
 # Streamlitアプリの描画

@@ -240,7 +240,7 @@ if "filtered_df" in st.session_state:
         layers=[layer2, layer1],
         initial_view_state=pdk.ViewState(latitude=center_lat, longitude=center_lon, zoom=zoom_scale, pitch=0),
         tooltip={"text": "{S_NAME}"},
-        map_style='mapbox://styles/mapbox/light-v10'
+        map_style='road'
     )
 
     st.pydeck_chart(deck)

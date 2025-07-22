@@ -79,7 +79,7 @@ if st.button("市区町村・小地域のデータを取得"):
         get_color="operator_color",
         pickable=True,
         radius_scale=20,
-        auto_highlight=True,
+        auto_highroad=True,
     )
 
     # Pydeckのマップの作成
@@ -87,7 +87,7 @@ if st.button("市区町村・小地域のデータを取得"):
         layers=[layer],
         initial_view_state=pdk.ViewState(latitude=center_lat, longitude=center_lon, zoom=14, pitch=0),
         tooltip={"text": "運行事業者：{operator}\nポート名：{name}\n駐輪可能数：{capacity}"},
-        map_style='mapbox://styles/mapbox/light-v10'  # ベースマップを白に変更
+        map_style='road'  # ベースマップを白に変更
     )
 
     # Streamlitアプリの描画
