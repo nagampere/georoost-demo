@@ -4,19 +4,6 @@ Home:
     page: pages/home.py
     icon: ":material/home:"
 
-Database:
-  - title: テーブルビュワー
-    description: duckdbに保存されたテーブルを表示する
-    page: pages/chart1.py
-    icon: ":material/search:"
-    image: images/chart1_demo.png
-
-  - title: テーブルエクスポート
-    description: duckdbに保存されたテーブルをエクスポートする
-    page: pages/chart2.py
-    icon: ":material/download:"
-    image: images/chart2_demo.png
-
 Analysis:
   - title: 円内の人口抽出
     description: 任意の地点と半径から、人口統計データを抽出して集計する
